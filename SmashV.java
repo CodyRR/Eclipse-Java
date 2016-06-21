@@ -103,7 +103,6 @@ public class SmashV extends JFrame implements ActionListener{
 					ImageIcon pic = new ImageIcon(name + "chr_00_"	+ chara.collection[randomNum] +"_0" + randomColor +".png");
 					
 					try {
-						System.out.println("Start");
 						Thread.sleep(1000);
 					} catch (InterruptedException e){
 					
@@ -125,7 +124,9 @@ public class SmashV extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == randomizer){
+			randomizer.setEnabled(false);
 			randomize();
+			randomizer.setEnabled(true);
 		}
 		else{
 			System.out.println("error");
