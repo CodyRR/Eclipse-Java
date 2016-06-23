@@ -10,6 +10,7 @@ import java.util.Random;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,11 +26,12 @@ public class SmashV extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static JLabel Player1, Player2, Player3, Player4;
+	private static JLabel Player1, Player2, Player3, Player4, Players[];
+	private static JCheckBox Check1, Check2, Check3, Check4, CheckPlayers[];
 	private static String name = "Super Smash Bros for Wii U/Character Icons/";
 	private JButton randomizer = new JButton("Randomize");
 	private CharacterSetup chara = new CharacterSetup();
-	private JLabel Players[];
+
 	
 	public SmashV(){
 		super("Smash");
@@ -58,8 +60,25 @@ public class SmashV extends JFrame implements ActionListener{
 		Player4.setLocation(622,100);
 		Player4.setIcon(image);
 		
-		Players = new JLabel[]{Player1, Player2, Player3, Player4};
+		Check1 = new JCheckBox("Random color");
+		Check1.setHorizontalTextPosition(SwingConstants.LEADING);
+		Check1.setSize(150,50);
+		Check1.setLocation(22,230);
+		Check2 = new JCheckBox("Random color");
+		Check2.setHorizontalTextPosition(SwingConstants.LEADING);
+		Check2.setSize(150,50);
+		Check2.setLocation(222,230);
+		Check3 = new JCheckBox("Random color");
+		Check3.setHorizontalTextPosition(SwingConstants.LEADING);
+		Check3.setSize(150,50);
+		Check3.setLocation(422,230);
+		Check4 = new JCheckBox("Random color");
+		Check4.setHorizontalTextPosition(SwingConstants.LEADING);
+		Check4.setSize(150,50);
+		Check4.setLocation(622,230);
 		
+		Players = new JLabel[]{Player1, Player2, Player3, Player4};
+		CheckPlayers= new JCheckBox[]{Check1, Check2, Check3, Check4};
 		randomizer.setLocation(366, 323);
 		randomizer.setSize(100,100);
 		randomizer.addActionListener(this);
@@ -69,6 +88,10 @@ public class SmashV extends JFrame implements ActionListener{
 		contentPane.add(Player2);
 		contentPane.add(Player3);
 		contentPane.add(Player4);
+		contentPane.add(Check1);
+		contentPane.add(Check2);
+		contentPane.add(Check3);
+		contentPane.add(Check4);
 		contentPane.add(randomizer);
 		
 		System.out.println("Here");
@@ -90,15 +113,31 @@ public class SmashV extends JFrame implements ActionListener{
 
 	public void randomize(){
 		
-		
 		Thread worker = new Thread(){
 			public void run(){
+				SwingUtilities.invokeLater(new Runnable(){
+
+					public void run() {
+						// TODO Auto-generated method stub
+						randomizer.setEnabled(false);
+					}
+				
+				});
+				
 				for(int i = 0; i < Players.length; i++){
 					
 					final int x = i;
 					Random rand= new Random();
 					int randomNum = rand.nextInt((51 - 0)+1) + 0;
-					int randomColor = rand.nextInt((8-1)+1) +1;
+					int randomColor;
+					
+					if(CheckPlayers[i].isSelected()){
+					
+						randomColor = rand.nextInt((8-1)+1) +1;
+					}
+					else{
+						randomColor = 1;
+					}
 					
 					ImageIcon pic = new ImageIcon(name + "chr_00_"	+ chara.collection[randomNum] +"_0" + randomColor +".png");
 					
@@ -116,6 +155,15 @@ public class SmashV extends JFrame implements ActionListener{
 					
 					});
 				}
+				
+				SwingUtilities.invokeLater(new Runnable(){
+
+					public void run() {
+						// TODO Auto-generated method stub
+						randomizer.setEnabled(true);
+					}
+				
+				});
 			}
 		};
 		worker.start();
@@ -124,9 +172,9 @@ public class SmashV extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == randomizer){
-			randomizer.setEnabled(false);
+			
 			randomize();
-			randomizer.setEnabled(true);
+			//randomizer.setEnabled(true);
 		}
 		else{
 			System.out.println("error");
